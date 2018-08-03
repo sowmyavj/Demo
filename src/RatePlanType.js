@@ -1,12 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles, MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
+
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: '#3EA8F4', 
+    }
+  }
+})
 
 const styles = theme => ({
   root: {
@@ -33,6 +42,7 @@ class RadioButtonsGroup extends React.Component {
     const { classes } = this.props;
 
     return (
+      <MuiThemeProvider theme={theme}>
       <div className={classes.root}>
         <FormControl component="fieldset" className={classes.formControl}>
           <FormLabel component="legend"></FormLabel>
@@ -43,15 +53,16 @@ class RadioButtonsGroup extends React.Component {
             value={this.state.value}
             onChange={this.handleChange}
           >
-            <FormControlLabel value="baseRatePlan" control={<Radio />} label="Base rate plan" />
-            <FormControlLabel value="derivedRatePlan" control={<Radio />} label="Derived rate plan" />
-            <FormControlLabel value="packageRatePlan" control={<Radio />} label="Package rate plan" />
-            <FormControlLabel value="intervalRatePlan" control={<Radio />} label="Interval rate plan" />
+            <FormControlLabel value="baseRatePlan" control={<Radio color="primary"/>} label="Base rate plan"   />
+            <FormControlLabel value="derivedRatePlan" control={<Radio color="primary"/>} label="Derived rate plan" />
+            <FormControlLabel value="packageRatePlan" control={<Radio color="primary"/>} label="Package rate plan" />
+            <FormControlLabel value="intervalRatePlan" control={<Radio color="primary"/>} label="Interval rate plan" />
 
           </RadioGroup>
         </FormControl>
        
       </div>
+      </MuiThemeProvider>
     );
   }
 }

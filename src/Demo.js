@@ -1,17 +1,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles, MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import StepContent from '@material-ui/core/StepContent';
+import { StepIcon ,StepButton } from '@material-ui/core/Stepper';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import NewPlan from './NewPlan';
 import RatePlanType from './RatePlanType';
 import SelectChannel from './SelectChannel';
-
+import './App.css';
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: '#8CC63F', 
+    }
+  }
+})
 const styles = theme => ({
   root: {
     width: '90%',
@@ -26,10 +34,11 @@ const styles = theme => ({
   resetContainer: {
     padding: theme.spacing.unit * 3,
   },
+  stepLabel: {color: 'red',	}//	height: '29px',	width: '211px',	'font-family': 'Lato',	'font-size': '24px',	'line-height': '29px',},
 });
 
 function getSteps() {
-  return ['Select rate plan', 'Select rate plan type', 'On which channnels will this rate plan be distributed?'];
+  return ['New rate plan name', 'Select rate plan type', 'On which channnels will this rate plan be distributed?'];
 }
 
 function getStepContent(step) {
@@ -74,12 +83,14 @@ class VerticalLinearStepper extends React.Component {
     const { activeStep } = this.state;
 
     return (
+      <MuiThemeProvider theme={theme}>
       <div className={classes.root}>
         <Stepper activeStep={activeStep} orientation="vertical">
           {steps.map((label, index) => {
             return (
-              <Step key={label}>
-                <StepLabel>{label}</StepLabel>
+              <Step key={label} >
+                <StepLabel  color={styles.stepLabel.color}
+                icon={<i className="material-icons" >radio_button_checked</i>} color="primary">{label}</StepLabel>
                 <StepContent>
                   <p>{getStepContent(index)}</p>
                   <div className={classes.actionsContainer}>
@@ -115,6 +126,7 @@ class VerticalLinearStepper extends React.Component {
           </Paper>
         )}
       </div>
+      </MuiThemeProvider>
     );
   }
 }
