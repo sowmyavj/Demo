@@ -89,7 +89,7 @@ class VerticalLinearStepper extends React.Component {
           {steps.map((label, index) => {
             return (
               <Step key={label} >
-                <StepLabel  color={styles.stepLabel.color}
+                <StepLabel 
                 icon={<i className="material-icons" >radio_button_checked</i>} color="primary">{label}</StepLabel>
                 <StepContent>
                   <p>{getStepContent(index)}</p>
