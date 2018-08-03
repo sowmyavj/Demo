@@ -1,22 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles, MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import FormLabel from '@material-ui/core/FormLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Checkbox from '@material-ui/core/Checkbox';
+import { orange } from '@material-ui/core/colors'
 
+const theme = createMuiTheme({
+    palette: {
+      primary: {
+        main: '#3EA8F4', 
+      }
+    }
+  })
 const styles = theme => ({
   root: {
     display: 'flex',
   },
   formControl: {
     margin: theme.spacing.unit * 3,
-  },
-  primary: {
-    color: '#3EA8F4',
   }
 });
 
@@ -38,6 +43,7 @@ class CheckboxesGroup extends React.Component {
     const error = Object.values(this.state).filter(v => v).length !== 2;
 
     return (
+        <MuiThemeProvider theme={theme}>
       <div className={classes.root}>
         <FormControl component="fieldset" className={classes.formControl}>
           <FormLabel component="legend">If you choose to distribute this Rate Plan to Booking.com, Expedia,
@@ -76,6 +82,7 @@ class CheckboxesGroup extends React.Component {
                   checked={expedia}
                   onChange={this.handleChange('expedia')}
                   value="expedia"
+                  color="primary"
                 />
               }
               label="Expedia"
@@ -83,6 +90,7 @@ class CheckboxesGroup extends React.Component {
           </FormGroup>
         </FormControl>
       </div>
+      </MuiThemeProvider>
     );
   }
 }
