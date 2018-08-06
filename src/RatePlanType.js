@@ -13,6 +13,18 @@ const theme = createMuiTheme({
     primary: {
       main: '#3EA8F4', 
     }
+  },
+  overrides: {
+    MuiFormControlLabel: {
+        label: {
+          'height': '22px',
+          'width': '140px',	
+          'color': '#333333',	
+          'font-family': 'Lato',	
+          'font-size': '18px',	
+          'line-height': '22px',
+        },
+    },
   }
 })
 
@@ -46,8 +58,8 @@ class RadioButtonsGroup extends React.Component {
         <FormControl component="fieldset" className={classes.formControl}>
           <FormLabel component="legend"></FormLabel>
           <RadioGroup
-            aria-label="Gender"
-            name="gender1"
+            aria-label="ratePlanType"
+            name="ratePlanType"
             className={classes.group}
             value={this.state.value}
             onChange={this.handleChange}  

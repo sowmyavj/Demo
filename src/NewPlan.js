@@ -2,8 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles, MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 
 
@@ -22,16 +20,21 @@ const styles = theme => ({
   },
   formControl: {
     margin: theme.spacing.unit,
+    height: '40px',
+    width: '404px'
   },
 });
 
 class ComposedTextField extends React.Component {
   state = {
-    name: 'Composed TextField',
+    name: '',
   };
 
   handleChange = event => {
     this.setState({ name: event.target.value });
+    if (this.state.name) {
+      this.props.onRatePlanNameChange(this.state.name);
+    }
   };
 
   render() {
@@ -41,7 +44,7 @@ class ComposedTextField extends React.Component {
       <MuiThemeProvider theme={theme}>
       <div className={classes.container}>
         <FormControl className={classes.formControl} >
-          <InputLabel htmlFor="name-simple">Name</InputLabel>
+          {/* <InputLabel htmlFor="name-simple">Name</InputLabel> */}
           <Input id="name-simple" value={this.state.name} onChange={this.handleChange} />
         </FormControl>
       </div>

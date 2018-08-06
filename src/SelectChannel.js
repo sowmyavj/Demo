@@ -14,6 +14,28 @@ const theme = createMuiTheme({
       primary: {
         main: '#3EA8F4', 
       }
+    },
+    overrides: {
+      MuiFormLabel: {
+          label: {
+            height: '57px',	width: '546px',	
+            color: '#333333',
+              'font-family': 'Lato',	
+              'font-size': '16px',	
+              'font-weight': '300',
+              'line-height': '19px'
+          }
+      },
+      MuiFormControlLabel: {
+        label: {
+          'height': '22px',
+          'width': '140px',	
+          'color': '#333333',	
+          'font-family': 'Lato',	
+          'font-size': '18px',	
+          'line-height': '22px',
+        },
+    }
     }
   })
 const styles = theme => ({

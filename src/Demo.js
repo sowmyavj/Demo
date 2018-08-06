@@ -5,7 +5,7 @@ import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import StepContent from '@material-ui/core/StepContent';
-import { StepIcon ,StepButton } from '@material-ui/core/Stepper';
+import { StepIcon ,StepButton, LensIcon } from '@material-ui/core/Stepper';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -25,7 +25,7 @@ const theme = createMuiTheme({
   overrides: {
     MuiStepLabel: {
         label: {
-          height: '29px',	width: '211px',	color: '#799DBB',	'font-family': 'Lato',	'font-size': '24px',	'line-height': '29px',
+          height: '29px',	width: '547px',	color: '#799DBB',	'font-family': 'Lato',	'font-size': '24px',	'line-height': '29px',
             '&$active': {
               color: '#155388'
             },
@@ -33,12 +33,22 @@ const theme = createMuiTheme({
               color: '#799DBB'
             },
         },
-        iconContainer :{
-          '&$completed' : {
-            color: '#799DBB'
-          }
-        }
     },
+    MuiStepContent: {
+      root: {
+        borderLeft: '1px solid #8CC63F'
+      },
+    },
+    MuiStepConnector :{
+      line: {
+        borderColor: '#8CC63F',
+      }
+    },
+    MuiStepIcon:{
+      '&$completed' : {
+        color: 'primary'
+    }
+  }
    
 }
 })
@@ -49,6 +59,8 @@ const styles = theme => ({
   button: {
     marginTop: theme.spacing.unit,
     marginRight: theme.spacing.unit,
+    height: '35px',
+    width: '123px'
   },
   actionsContainer: {
     marginBottom: theme.spacing.unit * 2,
@@ -60,12 +72,13 @@ const styles = theme => ({
 });
 
 function getSteps() {
-  return ['New rate plan name', 'Select rate plan type', 'On which channnels will this rate plan be distributed?'];
+  return ['New rate plan name', 'Select rate plan type', 'On which channels will this rate plan be distributed?'];
 }
 
 function getStepContent(step) {
   switch (step) {
     case 0:
+      // return <NewPlan onRatePlanNameChange={this.onRatePlanNameChange}/>;
       return <NewPlan/>;
     case 1:
       return <RatePlanType/>;
@@ -77,8 +90,18 @@ function getStepContent(step) {
 }
 
 class VerticalLinearStepper extends React.Component {
-  state = {
-    activeStep: 0,
+  constructor(props) {
+    super(props);
+    this.state = {
+      activeStep: 0,
+      newRateplanName : "",
+    };
+  }
+  onRatePlanNameChange = (newRatePlanName) => {
+    this.setState({
+      newRateplanName: newRatePlanName,
+
+    });
   };
 
   handleNext = () => {
@@ -111,7 +134,7 @@ class VerticalLinearStepper extends React.Component {
           {steps.map((label, index) => {
             return (
               <Step key={label} >
-                <StepLabel  style={{ fontSize: '150%', color: "secondary" }}
+              <StepLabel  style={{ fontSize: '150%', color: "secondary" }}
                 icon={<i className="material-icons" >radio_button_checked</i>} color="primary">{label}</StepLabel>
                 <StepContent>
                   <p>{getStepContent(index)}</p>
@@ -136,6 +159,7 @@ class VerticalLinearStepper extends React.Component {
                   </div>
                 </StepContent>
               </Step>
+              
             );
           })}
         </Stepper>
