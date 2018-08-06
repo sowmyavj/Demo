@@ -13,12 +13,34 @@ import NewPlan from './NewPlan';
 import RatePlanType from './RatePlanType';
 import SelectChannel from './SelectChannel';
 import './App.css';
+import orange from '@material-ui/core/colors/orange';
+
 const theme = createMuiTheme({
   palette: {
     primary: {
       main: '#8CC63F', 
-    }
-  }
+    },
+    secondary : orange
+  },
+  overrides: {
+    MuiStepLabel: {
+        label: {
+          height: '29px',	width: '211px',	color: '#799DBB',	'font-family': 'Lato',	'font-size': '24px',	'line-height': '29px',
+            '&$active': {
+              color: '#155388'
+            },
+            '&$completed' : {
+              color: '#799DBB'
+            },
+        },
+        iconContainer :{
+          '&$completed' : {
+            color: '#799DBB'
+          }
+        }
+    },
+   
+}
 })
 const styles = theme => ({
   root: {
@@ -89,7 +111,7 @@ class VerticalLinearStepper extends React.Component {
           {steps.map((label, index) => {
             return (
               <Step key={label} >
-                <StepLabel 
+                <StepLabel  style={{ fontSize: '150%', color: "secondary" }}
                 icon={<i className="material-icons" >radio_button_checked</i>} color="primary">{label}</StepLabel>
                 <StepContent>
                   <p>{getStepContent(index)}</p>
