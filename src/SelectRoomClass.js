@@ -5,15 +5,15 @@ import FormLabel from '@material-ui/core/FormLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import Checkbox from '@material-ui/core/Checkbox';
-import { orange } from '@material-ui/core/colors'
 
-const sources = {
-  innCenter: "innCenter",
-      bookingEngine: "Booking Engine",
-      bookingDotCom: "Booking.Com",
-      expedia: "Expedia"
+const roomClasses = {
+    selectAll: "Select All",
+  kingOceanView: "King ocean View",
+  kingCityView: "King city View",
+  queenOceanView: "Queen ocean View",
+  queenCityView: "Queen city View",
+  penthouseSuite: "Penthouse Suite"
 };
 
 const theme = createMuiTheme({
@@ -53,25 +53,23 @@ const styles = theme => ({
     margin: theme.spacing.unit * 3,
   }
 });
-const checkBox = {
-  innCenter:'innCenter',
-  bookingEngine:'Booking Engine',
-  bookingDotCom:'Booking.Com',
-  expedia:'Expedia'
-}
+
 class CheckboxesGroup extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      innCenter: false,
-      bookingEngine: false,
-      bookingDotCom: false,
-      expedia: false
+        selectAll: false,
+        kingOceanView: false,
+        kingCityView: false,
+        queenOceanView: false,
+        queenCityView: false,
+        penthouseSuite: false
     };
    
   }
   componentDidMount(){
-    let temp = this.props.channelsSelected;
+    let temp = this.props.roomclassesSelected;
+    //console.log("room class selected"+temp);
     if(temp){
       temp.map((val)=>{
         this.setState({
@@ -80,69 +78,96 @@ class CheckboxesGroup extends React.Component {
       });
     }else{
       this.setState ( {
-        innCenter: false,
-        bookingEngine: false,
-        bookingDotCom: false,
-        expedia: false
+        selectAll: false,
+        kingOceanView: false,
+        kingCityView: false,
+        queenOceanView: false,
+        queenCityView: false,
+        penthouseSuite: false
       });
     }
   }
+
   handleChange = name => event => {
     console.log("handleChange "+event.target.value+" "+event.target.checked);
-    this.setState({ [name]: event.target.checked });
-    this.props.onChannelSelected(event.target.value,event.target.checked );
+    if(name != 'selectAll'){
+        this.setState({ [name]: event.target.checked });
+    }else{
+        let roomClasskeyList = Object.keys(roomClasses);
+        roomClasskeyList.map((rc)=>{
+            this.setState({ [rc]: event.target.checked });
+        });
+    }
+    
+    this.props.onRoomclassesSelected(event.target.value,event.target.checked );
     
   };
 
   render() {
     const { classes } = this.props;
-    const { innCenter, bookingEngine, bookingDotCom, expedia } = this.state;
+    const { selectAll, kingOceanView, kingCityView, queenOceanView, queenCityView, penthouseSuite } = this.state;
     //const error = Object.values(this.state).filter(v => v).length !== 2;
-    console.log("render : +"+this.props.channels);
+
     return (
         <MuiThemeProvider theme={theme}>
       <div className={classes.root}>
         <FormControl component="fieldset" className={classes.formControl}>
-          <FormLabel component="legend">If you choose to distribute this Rate Plan to Booking.com, Expedia,
-              please create the Rate Plan on external channel first and contact innRoad Support(phone #) to complete
-              the mapping
+          <FormLabel component="legend">This setting is the default for the Rate Plan. It can later be changed for an individual season
           </FormLabel>
           <FormGroup>
             <FormControlLabel
+            control={
+                <Checkbox checked={selectAll} onChange={this.handleChange('selectAll')} value="selectAll"
+                color="primary" />
+            }
+            label="Select all"
+            />
+            <FormControlLabel
               control={
-                <Checkbox checked={innCenter} onChange={this.handleChange('innCenter')} value="innCenter"
+                <Checkbox checked={kingOceanView} onChange={this.handleChange('kingOceanView')} value="kingOceanView"
                 color="primary" />
               }
-              label="innCenter"
+              label="King ocean View"
             />
             <FormControlLabel
               control={
-                <Checkbox checked={bookingEngine} onChange={this.handleChange('bookingEngine')} value="bookingEngine" 
+                <Checkbox checked={kingCityView} onChange={this.handleChange('kingCityView')} value="kingCityView" 
                 color="primary"/>
               }
-              label="Booking Engine"
+              label="King city View"
             />
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={bookingDotCom}
-                  onChange={this.handleChange('bookingDotCom')}
-                  value="bookingDotCom"
+                  checked={queenOceanView}
+                  onChange={this.handleChange('queenOceanView')}
+                  value="queenOceanView"
                   color="primary"
                 />
               }
-              label="Booking.Com"
+              label="Queen ocean View"
             />
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={expedia}
-                  onChange={this.handleChange('expedia')}
-                  value="expedia"
+                  checked={queenCityView}
+                  onChange={this.handleChange('queenCityView')}
+                  value="queenCityView"
                   color="primary"
                 />
               }
-              label="Expedia"
+              label="Queen city View"
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={penthouseSuite}
+                  onChange={this.handleChange('penthouseSuite')}
+                  value="penthouseSuite"
+                  color="primary"
+                />
+              }
+              label="Penthouse Suite"
             />
           </FormGroup>
         </FormControl>

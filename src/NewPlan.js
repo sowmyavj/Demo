@@ -33,10 +33,11 @@ class ComposedTextField extends React.Component {
   handleChange = event => {
     this.setState({ name: event.target.value });
     if (this.state.name) {
-      this.props.onRatePlanNameChange(this.state.name);
+      //this.props.onRatePlanNameChange(this.state.name);
+      this.props.onRatePlanNameChange( event.target.value);
     }
   };
-
+  
   render() {
     const { classes } = this.props;
 

@@ -5,17 +5,13 @@ import FormLabel from '@material-ui/core/FormLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import Checkbox from '@material-ui/core/Checkbox';
-import { orange } from '@material-ui/core/colors'
 
-const sources = {
-  innCenter: "innCenter",
-      bookingEngine: "Booking Engine",
-      bookingDotCom: "Booking.Com",
-      expedia: "Expedia"
-};
-
+const restrictions ={
+    lengthOfStay:"Length of stay",
+    advancedPurchase:"Advanced purchase",
+    promoCode: "Promo code"
+  }
 const theme = createMuiTheme({
     palette: {
       primary: {
@@ -53,25 +49,19 @@ const styles = theme => ({
     margin: theme.spacing.unit * 3,
   }
 });
-const checkBox = {
-  innCenter:'innCenter',
-  bookingEngine:'Booking Engine',
-  bookingDotCom:'Booking.Com',
-  expedia:'Expedia'
-}
+
 class CheckboxesGroup extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      innCenter: false,
-      bookingEngine: false,
-      bookingDotCom: false,
-      expedia: false
+        lengthOfStay:false,
+        advancedPurchase:false,
+        promoCode: false
     };
    
   }
   componentDidMount(){
-    let temp = this.props.channelsSelected;
+    let temp = this.props.restrictionsSelected;
     if(temp){
       temp.map((val)=>{
         this.setState({
@@ -80,69 +70,48 @@ class CheckboxesGroup extends React.Component {
       });
     }else{
       this.setState ( {
-        innCenter: false,
-        bookingEngine: false,
-        bookingDotCom: false,
-        expedia: false
+        lengthOfStay:false,
+        advancedPurchase:false,
+        promoCode: false
       });
     }
   }
   handleChange = name => event => {
     console.log("handleChange "+event.target.value+" "+event.target.checked);
     this.setState({ [name]: event.target.checked });
-    this.props.onChannelSelected(event.target.value,event.target.checked );
-    
+    this.props.onRestrictionsSelected(event.target.value,event.target.checked );
   };
 
   render() {
     const { classes } = this.props;
-    const { innCenter, bookingEngine, bookingDotCom, expedia } = this.state;
+    const { lengthOfStay, advancedPurchase, promoCode } = this.state;
     //const error = Object.values(this.state).filter(v => v).length !== 2;
-    console.log("render : +"+this.props.channels);
+    console.log("render : +"+this.props.restrictions);
     return (
         <MuiThemeProvider theme={theme}>
       <div className={classes.root}>
         <FormControl component="fieldset" className={classes.formControl}>
-          <FormLabel component="legend">If you choose to distribute this Rate Plan to Booking.com, Expedia,
-              please create the Rate Plan on external channel first and contact innRoad Support(phone #) to complete
-              the mapping
-          </FormLabel>
           <FormGroup>
             <FormControlLabel
               control={
-                <Checkbox checked={innCenter} onChange={this.handleChange('innCenter')} value="innCenter"
+                <Checkbox checked={lengthOfStay} onChange={this.handleChange('lengthOfStay')} value="lengthOfStay"
                 color="primary" />
               }
-              label="innCenter"
+              label="Length of stay"
             />
             <FormControlLabel
               control={
-                <Checkbox checked={bookingEngine} onChange={this.handleChange('bookingEngine')} value="bookingEngine" 
+                <Checkbox checked={advancedPurchase} onChange={this.handleChange('advancedPurchase')} value="advancedPurchase" 
                 color="primary"/>
               }
-              label="Booking Engine"
+              label="Advanced Purchase"
             />
             <FormControlLabel
               control={
-                <Checkbox
-                  checked={bookingDotCom}
-                  onChange={this.handleChange('bookingDotCom')}
-                  value="bookingDotCom"
-                  color="primary"
-                />
+                <Checkbox checked={promoCode} onChange={this.handleChange('promoCode')} value="promoCode"
+                color="primary" />
               }
-              label="Booking.Com"
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={expedia}
-                  onChange={this.handleChange('expedia')}
-                  value="expedia"
-                  color="primary"
-                />
-              }
-              label="Expedia"
+              label="Promo code"
             />
           </FormGroup>
         </FormControl>

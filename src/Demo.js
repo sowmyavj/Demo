@@ -4,17 +4,43 @@ import { withStyles, MuiThemeProvider, createMuiTheme } from '@material-ui/core/
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
-import StepContent from '@material-ui/core/StepContent';
-import { StepIcon ,StepButton, LensIcon } from '@material-ui/core/Stepper';
+import {StepContent, TextField} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import NewPlan from './NewPlan';
 import RatePlanType from './RatePlanType';
 import SelectChannel from './SelectChannel';
+import SelectRoomClass from './SelectRoomClass';
+import SelectRestrictions from './SelectRestrictions';
+
 import './App.css';
 import orange from '@material-ui/core/colors/orange';
 
+const ratePlanType = {
+  baseRatePlan:"Base Rate Plan",
+  derivedRatePlan:"Derived Rate Plan",
+  packageRatePlan:"Package Rate Plan",
+  intervalRatePlan:"Interval Rate Plan"
+};
+const sources = {
+  innCenter: "innCenter",
+      bookingEngine: "Booking Engine",
+      bookingDotCom: "Booking.Com",
+      expedia: "Expedia"
+};
+const roomClasses = {
+  kingOceanView: "King ocean View",
+  kingCityView: "King city View",
+  queenOceanView: "Queen ocean View",
+  queenCityView: "Queen city View",
+  penthouseSuite: "Penthouse Suite"
+};
+const restrictions ={
+  lengthOfStay:"Length of stay",
+  advancedPurchase:"Advanced purchase",
+  promoCode: "Promo code"
+}
 const theme = createMuiTheme({
   palette: {
     primary: {
@@ -60,34 +86,22 @@ const styles = theme => ({
     marginTop: theme.spacing.unit,
     marginRight: theme.spacing.unit,
     height: '35px',
-    width: '123px'
+    width: '123px',
+    marginLeft : theme.spacing.unit
   },
   actionsContainer: {
     marginBottom: theme.spacing.unit * 2,
+
   },
   resetContainer: {
     padding: theme.spacing.unit * 3,
   },
-  stepLabel: {color: 'red',	}//	height: '29px',	width: '211px',	'font-family': 'Lato',	'font-size': '24px',	'line-height': '29px',},
-});
-
-function getSteps() {
-  return ['New rate plan name', 'Select rate plan type', 'On which channels will this rate plan be distributed?'];
-}
-
-function getStepContent(step) {
-  switch (step) {
-    case 0:
-      // return <NewPlan onRatePlanNameChange={this.onRatePlanNameChange}/>;
-      return <NewPlan/>;
-    case 1:
-      return <RatePlanType/>;
-    case 2:
-      return <SelectChannel/>;
-    default:
-      return 'Unknown step';
+  formControl: {
+    margin: theme.spacing.unit,
+    height: '40px',
+    width: '404px'
   }
-}
+});
 
 class VerticalLinearStepper extends React.Component {
   constructor(props) {
@@ -95,12 +109,99 @@ class VerticalLinearStepper extends React.Component {
     this.state = {
       activeStep: 0,
       newRateplanName : "",
+      ratePlanType: "",
+      channels:[],
+      roomClasses:[],
+      restrictions:[]
     };
   }
+ getSteps=() =>{
+    return ['New rate plan name', 'Select rate plan type', 'On which channels will this rate plan be distributed?',
+  'Which room classes are available in this rate plan?', 'Which restrictions will be applied to this rate plan by default?'];
+  }
+  
+  getStepContent=(step)=> {
+    switch (step) {
+      case 0:
+        return <NewPlan onRatePlanNameChange={this.onRatePlanNameChange}/>;
+      case 1:
+        return <RatePlanType onRateTypeSelected={this.onRateTypeSelected} rateTypeSelected={this.state.ratePlanType}/>;
+      case 2:
+        return <SelectChannel onChannelSelected={this.onChannelSelected} channelsSelected={this.state.channels}/>;
+      case 3:
+        return <SelectRoomClass onRoomclassesSelected={this.onRoomclassesSelected} roomclassesSelected={this.state.roomClasses}/>;
+      case 4:
+        return <SelectRestrictions onRestrictionsSelected={this.onRestrictionsSelected} restrictionsSelected={this.state.restrictions}/>;
+      default:
+        return 'Unknown step';
+    }
+  }
+  
   onRatePlanNameChange = (newRatePlanName) => {
     this.setState({
       newRateplanName: newRatePlanName,
 
+    });
+  };
+  onRateTypeSelected = (ratePlanType) => {
+    this.setState({
+      ratePlanType: ratePlanType,
+    });
+  };
+  onChannelSelected = (channel, isSelected) => {
+    let _sources = this.state.channels;
+    console.log("channels "+_sources);
+    if(isSelected){
+      _sources.indexOf(channel) === -1 ? _sources.push(channel) : console.log("This item already exists");
+    }else{
+
+      const filteredItems = _sources.filter(item => item !== channel);
+      _sources = filteredItems;
+      console.log("Afetr filter channels "+_sources);
+    }
+
+    console.log("Afetr concaqt channels "+_sources);
+    this.setState({
+      channels: _sources,
+    });
+  };
+
+  onRoomclassesSelected = (roomClass, isSelected) => {
+    let _roomClasses = this.state.roomClasses;
+    console.log("_roomClasses "+_roomClasses);
+    if(roomClass != 'selectAll'){
+      if(isSelected){
+        _roomClasses.indexOf(roomClass) === -1 ? _roomClasses.push(roomClass) : console.log("This item already exists");
+      }else{
+  
+        const filteredItems = _roomClasses.filter(item => item !== roomClass);
+        _roomClasses = filteredItems;
+        console.log("Afetr filter channels "+_roomClasses);
+      }
+    }else{
+      _roomClasses = Object.keys(roomClasses);
+    }
+    console.log("Afetr concaqt channels "+_roomClasses);
+    this.setState({
+      roomClasses: _roomClasses,
+    });
+  };
+
+  onRestrictionsSelected = (restriction, isSelected) => {
+    let _restrictions = this.state.restrictions;
+    console.log("channels "+_restrictions);
+    if(isSelected){
+      _restrictions.indexOf(restriction) === -1 ? _restrictions.push(restriction) : console.log("This item already exists");
+    }else{
+
+      const filteredItems = _restrictions.filter(item => item !== restriction);
+      _restrictions = filteredItems;
+      console.log("Afetr filter _restrictions "+_restrictions);
+    }
+
+    console.log("Afetr concaqt _restrictions "+_restrictions);
+    this.setState({
+      channels: _restrictions,
     });
   };
 
@@ -119,12 +220,45 @@ class VerticalLinearStepper extends React.Component {
   handleReset = () => {
     this.setState({
       activeStep: 0,
+      newRateplanName : "",
+      ratePlanType: "",
+      channels:[],
+      roomClasses:[],
+      restrictions:[]
     });
   };
-
+  getValue=(stepIdx)=>{
+    if(stepIdx===0){
+      return this.state.newRateplanName;
+    } else if(stepIdx===1){
+      return ratePlanType[this.state.ratePlanType];
+    } else if(stepIdx===2){
+      //let sources="";
+      let channels=this.state.channels;
+      let channelsString=channels.map((c)=>{
+         return (sources[c]);
+      });
+      return channelsString.join(",");
+    } else if(stepIdx===3){
+      //let sources="";
+      let rcs=this.state.roomClasses;
+      let roomClassesString=rcs.map((c)=>{
+         return (roomClasses[c]);
+      });
+      return roomClassesString.join(",");
+    }else if(stepIdx===4){
+      //let sources="";
+      let res=this.state.restrictions;
+      console.log("res"+res);
+      let restrictionsString=res.map((val)=>{
+         return (restrictions[val]);
+      });
+      return restrictionsString.join(",");
+    }
+  }
   render() {
     const { classes } = this.props;
-    const steps = getSteps();
+    const steps = this.getSteps();
     const { activeStep } = this.state;
 
     return (
@@ -136,25 +270,44 @@ class VerticalLinearStepper extends React.Component {
               <Step key={label} >
               <StepLabel  style={{ fontSize: '150%', color: "secondary" }}
                 icon={<i className="material-icons" >radio_button_checked</i>} color="primary">{label}</StepLabel>
+                { activeStep !== index &&
+                <TextField
+                  id="read-only-input"
+                  defaultValue=""
+                  className={classes.formControl}
+                  margin="normal"
+                  InputProps={{
+                    readOnly: true,
+                  }}
+                  value={this.getValue(index)}
+                />
+                }
+                { activeStep === index &&
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={this.handleNext}
+                  className={classes.button}
+                  disabled={! this.getValue(index)}
+                >
+                {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                </Button> 
+              }
+              {  activeStep === index &&
+                <Button
+                  disabled={activeStep === 0}
+                  onClick={this.handleBack}
+                  className={classes.button}
+                >
+                  Back
+                </Button>
+              }
+    }
                 <StepContent>
-                  <p>{getStepContent(index)}</p>
+                  <p>{this.getStepContent(index)}</p>
                   <div className={classes.actionsContainer}>
                     <div>
-                      <Button
-                        disabled={activeStep === 0}
-                        onClick={this.handleBack}
-                        className={classes.button}
-                      >
-                        Back
-                      </Button>
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={this.handleNext}
-                        className={classes.button}
-                      >
-                        {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-                      </Button>
+                      
                     </div>
                   </div>
                 </StepContent>

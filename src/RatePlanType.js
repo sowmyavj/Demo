@@ -8,6 +8,12 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 
+const ratePlanType = {
+  baseRatePlan:"Base Rate Plan",
+  derivedRatePlan:"Derived Rate Plan",
+  packageRatePlan:"Package Rate Plan",
+  intervalRatePlan:"Interval Rate Plan"
+};
 const theme = createMuiTheme({
   palette: {
     primary: {
@@ -42,16 +48,22 @@ const styles = theme => ({
 
 class RadioButtonsGroup extends React.Component {
   state = {
-    value: 'female',
+    value: '',
   };
-
+  componentDidMount(){
+    this.setState(
+      {value: this.props.rateTypeSelected}
+    );
+  }
   handleChange = event => {
-    this.setState({ value: event.target.value });
+    let radioValue=event.target.value;
+    this.setState({ value: radioValue });
+    this.props.onRateTypeSelected(radioValue);
   };
 
   render() {
     const { classes } = this.props;
-
+   // console.log("this.props.rateTypeSelected "+(this.props.rateTypeSelected === 'intervalRatePlan'));
     return (
       <MuiThemeProvider theme={theme}>
       <div className={classes.root}>
@@ -62,12 +74,12 @@ class RadioButtonsGroup extends React.Component {
             name="ratePlanType"
             className={classes.group}
             value={this.state.value}
-            onChange={this.handleChange}  
+            onChange={(e)=>this.handleChange(e)}  
           >
-            <FormControlLabel value="baseRatePlan" control={<Radio color="primary"/>} label="Base rate plan"   />
-            <FormControlLabel value="derivedRatePlan" control={<Radio color="primary"/>} label="Derived rate plan" />
-            <FormControlLabel value="packageRatePlan" control={<Radio color="primary"/>} label="Package rate plan" />
-            <FormControlLabel value="intervalRatePlan" control={<Radio color="primary"/>} label="Interval rate plan" />
+            <FormControlLabel value="baseRatePlan" control={<Radio color="primary"/>} label="Base rate plan" checked={this.state.value === 'baseRatePlan'}  />
+            <FormControlLabel value="derivedRatePlan" control={<Radio color="primary"/>} label="Derived rate plan" checked={this.state.value === 'derivedRatePlan'}  />
+            <FormControlLabel value="packageRatePlan" control={<Radio color="primary"/>} label="Package rate plan" checked={this.state.value === 'packageRatePlan'} />
+            <FormControlLabel value="intervalRatePlan" control={<Radio color="primary"/>} label="Interval rate plan"  checked={this.state.value === 'intervalRatePlan'}  />
 
           </RadioGroup>
         </FormControl>
