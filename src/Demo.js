@@ -51,7 +51,7 @@ const theme = createMuiTheme({
   overrides: {
     MuiStepLabel: {
         label: {
-          height: '29px',	width: '547px',	color: '#799DBB',	'font-family': 'Lato',	'font-size': '24px',	'line-height': '29px',
+          height: '29px',	width: '900px',	color: '#799DBB',	'font-family': 'Lato',	'font-size': '24px',	'line-height': '29px',
             '&$active': {
               color: '#155388'
             },
@@ -112,7 +112,11 @@ class VerticalLinearStepper extends React.Component {
       ratePlanType: "",
       channels:[],
       roomClasses:[],
-      restrictions:[]
+      restrictions:[],
+      minLengthOfStayDays:0,
+      maxLengthOfStayDays:0,
+      minAdvPurchaseDays:0,
+      maxAdvPurchaseDays:0
     };
   }
  getSteps=() =>{
@@ -131,7 +135,16 @@ class VerticalLinearStepper extends React.Component {
       case 3:
         return <SelectRoomClass onRoomclassesSelected={this.onRoomclassesSelected} roomclassesSelected={this.state.roomClasses}/>;
       case 4:
-        return <SelectRestrictions onRestrictionsSelected={this.onRestrictionsSelected} restrictionsSelected={this.state.restrictions}/>;
+        return <SelectRestrictions onRestrictionsSelected={this.onRestrictionsSelected} restrictionsSelected={this.state.restrictions}
+        handleMinLengthOfStayDays={this.handleMinLengthOfStayDays}
+        handleMaxLengthOfStayDays={this.handleMaxLengthOfStayDays}
+        minLenDays={this.state.minLengthOfStayDays}
+        maxLenDays={this.state.maxLengthOfStayDays}
+        handleMinAdvancePurchaseDays={this.handleMinAdvancePurchaseDays}
+        handleMaxAdvancePurchaseDays={this.handleMaxAdvancePurchaseDays}
+        minAdvPurchaseDays={this.state.minAdvPurchaseDays}
+        maxAdvPurchaseDays={this.state.maxAdvPurchaseDays}
+        />;
       default:
         return 'Unknown step';
     }
@@ -189,7 +202,7 @@ class VerticalLinearStepper extends React.Component {
 
   onRestrictionsSelected = (restriction, isSelected) => {
     let _restrictions = this.state.restrictions;
-    console.log("channels "+_restrictions);
+    console.log("Inside onRestrictionsSelected _restrictions "+_restrictions);
     if(isSelected){
       _restrictions.indexOf(restriction) === -1 ? _restrictions.push(restriction) : console.log("This item already exists");
     }else{
@@ -199,12 +212,31 @@ class VerticalLinearStepper extends React.Component {
       console.log("Afetr filter _restrictions "+_restrictions);
     }
 
-    console.log("Afetr concaqt _restrictions "+_restrictions);
+    console.log("Afetr concat _restrictions "+_restrictions);
     this.setState({
-      channels: _restrictions,
+      restrictions: _restrictions,
     });
   };
-
+  handleMinLengthOfStayDays = (_minLengthOfStayDays) =>{
+    this.setState({
+      minLengthOfStayDays:_minLengthOfStayDays
+    });
+  }
+  handleMaxLengthOfStayDays = (_maxLengthOfStayDays) =>{
+    this.setState({
+      maxLengthOfStayDays:_maxLengthOfStayDays
+    });
+  }
+  handleMinAdvancePurchaseDays = (_minAdvPurchaseDays) =>{
+    this.setState({
+      minAdvPurchaseDays:_minAdvPurchaseDays
+    });
+  }
+  handleMaxAdvancePurchaseDays = (_maxAdvPurchaseDays) =>{
+    this.setState({
+      maxAdvPurchaseDays:_maxAdvPurchaseDays
+    });
+  }
   handleNext = () => {
     this.setState(state => ({
       activeStep: state.activeStep + 1,
@@ -224,7 +256,11 @@ class VerticalLinearStepper extends React.Component {
       ratePlanType: "",
       channels:[],
       roomClasses:[],
-      restrictions:[]
+      restrictions:[],
+      minLengthOfStayDays:0,
+      maxLengthOfStayDays:0,
+      minAdvPurchaseDays:0,
+      maxAdvPurchaseDays:0
     });
   };
   getValue=(stepIdx)=>{
@@ -269,7 +305,7 @@ class VerticalLinearStepper extends React.Component {
             return (
               <Step key={label} >
               <StepLabel  style={{ fontSize: '150%', color: "secondary" }}
-                icon={<i className="material-icons" >radio_button_checked</i>} color="primary">{label}</StepLabel>
+                 color="primary">{label}</StepLabel>
                 { activeStep !== index &&
                 <TextField
                   id="read-only-input"
